@@ -3,21 +3,16 @@ import java.util.Scanner;
 public class numberconverter {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose conversion type:");
-        System.out.println("1. Decimal to Binary");
-        System.out.println("2. Binary to Decimal");
-        System.out.println("3. Decimal to Hexadecimal");
-        System.out.println("4. Hexadecimal to Decimal");
-        System.out.println("5. Decimal to Octal");
-        System.out.println("6. Octal to Decimal");
-        System.out.println("7. Binary to Hexadecimal");
-        System.out.println("8. Hexadecimal to Binary");
-        System.out.println("9. Binary to Octal");
-        System.out.println("10. Octal to Binary");
-        System.out.println("11. Hexadecimal to Octal");
-        System.out.println("12. Octal to Hexadecimal");
-        int choice = scanner.nextInt();
+        boolean keepRunning = true;
+        while (keepRunning) {
+            printMenu();
+            int choice = getInput(scanner, "Enter your choice: (0 to exit) ");
+        
         switch (choice) {
+            case 0:
+                keepRunning = false;
+                System.out.println("Exiting...");
+                break;
             case 1:
                 System.out.print("Enter decimal number: ");
                 int decimal = scanner.nextInt();
@@ -81,7 +76,37 @@ public class numberconverter {
             default:
                 System.out.println("Invalid choice");
         }
+        System.out.println("Return to main menu? (yes/no)");
+        String response = scanner.next();
+        if (!response.equalsIgnoreCase("yes")) {
+            keepRunning = false;
+            System.out.println("Exiting...");
+        }
+        System.out.println();
+        }
             scanner.close();
+
+    }
+        public static void printMenu() {
+        System.out.println("Choose conversion type:");
+        System.out.println("1. Decimal to Binary");
+        System.out.println("2. Binary to Decimal");
+        System.out.println("3. Decimal to Hexadecimal");
+        System.out.println("4. Hexadecimal to Decimal");
+        System.out.println("5. Decimal to Octal");
+        System.out.println("6. Octal to Decimal");
+        System.out.println("7. Binary to Hexadecimal");
+        System.out.println("8. Hexadecimal to Binary");
+        System.out.println("9. Binary to Octal");
+        System.out.println("10. Octal to Binary");
+        System.out.println("11. Hexadecimal to Octal");
+        System.out.println("12. Octal to Hexadecimal");
+        System.out.println("0. Exit");
+    }
+    public static int getInput(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        return scanner.nextInt();
+        
     }
     public static String decimalToBinary(int decimal) {
         return Integer.toBinaryString(decimal);
@@ -132,4 +157,5 @@ public class numberconverter {
     }
 }
         
+
 
