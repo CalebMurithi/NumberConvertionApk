@@ -1,0 +1,189 @@
+package com.software.numericalconvertor;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private Spinner conversionTypeSpinner;
+    private EditText inputEditText;
+    private TextView resultTextView;
+    private Button convertButton, clearButton;
+
+    private String[] conversionTypes = {
+            "Decimal to Binary",
+            "Binary to Decimal",
+            "Decimal to Hexadecimal",
+            "Hexadecimal to Decimal",
+            "Decimal to Octal",
+            "Octal to Decimal",
+            "Binary to Hexadecimal",
+            "Hexadecimal to Binary",
+            "Binary to Octal",
+            "Octal to Binary",
+            "Hexadecimal to Octal",
+            "Octal to Hexadecimal"
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeViews();
+        setupSpinner();
+        setupButtons();
+    }
+
+    private void initializeViews() {
+        conversionTypeSpinner = findViewById(R.id.conversionTypeSpinner);
+        inputEditText = findViewById(R.id.inputEditText);
+        resultTextView = findViewById(R.id.resultTextView);
+        convertButton = findViewById(R.id.convertButton);
+        clearButton = findViewById(R.id.clearButton);
+    }
+
+    private void setupSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                conversionTypes
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        conversionTypeSpinner.setAdapter(adapter);
+    }
+
+    private void setupButtons() {
+        convertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performConversion();
+            }
+        });
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputEditText.setText("");
+                resultTextView.setText("Result will appear here");
+            }
+        });
+    }
+
+    private void performConversion() {
+        String input = inputEditText.getText().toString().trim();
+        if (input.isEmpty()) {
+            Toast.makeText(this, "Please enter a number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int selectedPosition = conversionTypeSpinner.getSelectedItemPosition();
+        String result;
+
+        try {
+            switch (selectedPosition) {
+                case 0: // Decimal to Binary
+                    result = decimalToBinary(Integer.parseInt(input));
+                    break;
+                case 1: // Binary to Decimal
+                    result = String.valueOf(binaryToDecimal(input));
+                    break;
+                case 2: // Decimal to Hexadecimal
+                    result = decimalToHexadecimal(Integer.parseInt(input));
+                    break;
+                case 3: // Hexadecimal to Decimal
+                    result = String.valueOf(hexadecimalToDecimal(input));
+                    break;
+                case 4: // Decimal to Octal
+                    result = decimalToOctal(Integer.parseInt(input));
+                    break;
+                case 5: // Octal to Decimal
+                    result = String.valueOf(octalToDecimal(input));
+                    break;
+                case 6: // Binary to Hexadecimal
+                    result = binaryToHexadecimal(input);
+                    break;
+                case 7: // Hexadecimal to Binary
+                    result = hexadecimalToBinary(input);
+                    break;
+                case 8: // Binary to Octal
+                    result = binaryToOctal(input);
+                    break;
+                case 9: // Octal to Binary
+                    result = octalToBinary(input);
+                    break;
+                case 10: // Hexadecimal to Octal
+                    result = hexadecimalToOctal(input);
+                    break;
+                case 11: // Octal to Hexadecimal
+                    result = octalToHexadecimal(input);
+                    break;
+                default:
+                    result = "Invalid conversion type";
+            }
+            resultTextView.setText("Result: " + result);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid input format", Toast.LENGTH_SHORT).show();
+            resultTextView.setText("Error: Invalid input");
+        } catch (Exception e) {
+            Toast.makeText(this, "Conversion error", Toast.LENGTH_SHORT).show();
+            resultTextView.setText("Error: " + e.getMessage());
+        }
+    }
+
+    // Conversion methods (same as your original code)
+    public static String decimalToBinary(int decimal) {
+        return Integer.toBinaryString(decimal);
+    }
+
+    public static int binaryToDecimal(String binary) {
+        return Integer.parseInt(binary, 2);
+    }
+
+    public static String decimalToHexadecimal(int decimal) {
+        return Integer.toHexString(decimal).toUpperCase();
+    }
+
+    public static int hexadecimalToDecimal(String hex) {
+        return Integer.parseInt(hex, 16);
+    }
+
+    public static String decimalToOctal(int decimal) {
+        return Integer.toOctalString(decimal);
+    }
+
+    public static int octalToDecimal(String octal) {
+        return Integer.parseInt(octal, 8);
+    }
+
+    public static String binaryToHexadecimal(String binary) {
+        return decimalToHexadecimal(binaryToDecimal(binary));
+    }
+
+    public static String hexadecimalToBinary(String hex) {
+        return decimalToBinary(hexadecimalToDecimal(hex));
+    }
+
+    public static String binaryToOctal(String binary) {
+        return decimalToOctal(binaryToDecimal(binary));
+    }
+
+    public static String octalToBinary(String octal) {
+        return decimalToBinary(octalToDecimal(octal));
+    }
+
+    public static String hexadecimalToOctal(String hex) {
+        return decimalToOctal(hexadecimalToDecimal(hex));
+    }
+
+    public static String octalToHexadecimal(String octal) {
+        return decimalToHexadecimal(octalToDecimal(octal));
+    }
+}
